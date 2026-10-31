@@ -1,0 +1,9 @@
+{
+  "name": "lemon",
+  "productName": "Lemon",
+  "description": "A refreshing, open-source Matrix chat client",
+  "appId": "io.github.ooofruitsnacks.lemon",
+  "protocols": [
+    "lemon"
+  ]
+}
