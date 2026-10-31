@@ -135,16 +135,38 @@ jobs:
           name: lemon-webapp
           path: apps/desktop
 
-      - name: Build packages and run native smoke checks
-        run: node lemon/build.mjs desktop "${{ matrix.arch }}"
+            - name: Build packages and run native smoke checks
         env:
           USE_SYSTEM_FPM: "true"
           USE_HARD_LINKS: "false"
-          CSC_LINK: ${{ matrix.platform == 'macos' && secrets.MAC_CSC_LINK || matrix.platform == 'windows' && secrets.WIN_CSC_LINK || '' }}
-          CSC_KEY_PASSWORD: ${{ matrix.platform == 'macos' && secrets.MAC_CSC_KEY_PASSWORD || matrix.platform == 'windows' && secrets.WIN_CSC_KEY_PASSWORD || '' }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+          CSC_LINK: ${{ startsWith(github.ref, 'refs/tags/v') && ((matrix.platform == 'macos' && secrets.BUILD_CERTIFICATE_BASE64) || (matrix.platform == 'windows' && secrets.WIN_CSC_LINK)) || '' }}
+          CSC_KEY_PASSWORD: ${{ startsWith(github.ref, 'refs/tags/v') && ((matrix.platform == 'macos' && secrets.P12_PASSWORD) || (matrix.platform == 'windows' && secrets.WIN_CSC_KEY_PASSWORD)) || '' }}
+
+          APPLE_ID: ${{ matrix.platform == 'macos' && startsWith(github.ref, 'refs/tags/v') && secrets.APPLE_ID || '' }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ matrix.platform == 'macos' && startsWith(github.ref, 'refs/tags/v') && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
+          APPLE_TEAM_ID: ${{ matrix.platform == 'macos' && startsWith(github.ref, 'refs/tags/v') && secrets.APPLE_TEAM_ID || '' }}
+
+        run: |
+          set -euo pipefail
+
+          if [[ "$RUNNER_OS" == "macOS" &&
+                "$GITHUB_REF" == refs/tags/v* ]]; then
+            for name in \
+              CSC_LINK \
+              CSC_KEY_PASSWORD \
+              APPLE_ID \
+              APPLE_APP_SPECIFIC_PASSWORD \
+              APPLE_TEAM_ID
+            do
+              if [[ -z "${!name:-}" ]]; then
+                echo "::error::Required signing credential is missing: $name"
+                exit 1
+              fi
+            done
+          fi
+
+          node lemon/build.mjs desktop "${{ matrix.arch }}"
 
       - name: Check Linux glibc requirements
         if: runner.os == 'Linux'
