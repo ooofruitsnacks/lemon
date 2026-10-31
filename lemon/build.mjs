@@ -17,6 +17,21 @@ import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
+for (const required of [
+    "package.json",
+    "pnpm-workspace.yaml",
+    "apps/web/package.json",
+    "apps/desktop/package.json",
+]) {
+    if (!existsSync(join(root, required))) {
+        throw new Error(
+            `Invalid repository root: ${root}\n` +
+            `Missing: ${required}\n` +
+            "Place this script at <repository>/lemon/build.mjs, " +
+            "inside the complete Element-derived checkout."
+        );
+    }
+}
 const desktop = join(root, "apps/desktop");
 const project = JSON.parse(
     readFileSync(join(root, "lemon/project.json"), "utf8"),
