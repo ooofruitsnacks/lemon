@@ -135,7 +135,7 @@ jobs:
           name: lemon-webapp
           path: apps/desktop
 
-            - name: Build packages and run native smoke checks
+      - name: Build packages and run native smoke checks
         env:
           USE_SYSTEM_FPM: "true"
           USE_HARD_LINKS: "false"
