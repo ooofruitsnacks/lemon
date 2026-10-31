@@ -1,0 +1,108 @@
+{
+  "brand": "Lemon",
+  "default_device_display_name": "Lemon",
+  "default_server_name": "matrix.org",
+  "disable_custom_urls": false,
+  "disable_guests": true,
+  "default_theme": "custom-Lemon Summer Breeze",
+  "update_base_url": "",
+  "branding": {
+    "auth_header_logo_url": "lemon-logo.svg",
+    "welcome_background_url": "lemon-breeze.svg"
+  },
+  "element_call": {
+    "brand": "Lemon Call",
+    "disable": false,
+    "use_exclusively": false
+  },
+  "setting_defaults": {
+    "custom_themes": [
+      {
+        "name": "Lemon Summer Breeze",
+        "is_dark": false,
+        "colors": {
+          "accent-color": "#476B2D",
+          "primary-color": "#476B2D",
+          "warning-color": "#B93832",
+          "sidebar-color": "#F2DD79",
+          "roomlist-background-color": "#FFF8D7",
+          "roomlist-text-color": "#263A2B",
+          "roomlist-text-secondary-color": "#52634C",
+          "roomlist-highlights-color": "#E5EFCA",
+          "roomlist-separator-color": "#D8DAB7",
+          "timeline-background-color": "#FFFEF6",
+          "timeline-text-color": "#25362B",
+          "timeline-text-secondary-color": "#596653",
+          "timeline-highlights-color": "#F4F1CC",
+          "username-colors": [
+            "#476B2D",
+            "#8C5700",
+            "#006B69",
+            "#4564A0",
+            "#835297",
+            "#A04463",
+            "#985236",
+            "#4D6846"
+          ],
+          "avatar-background-colors": [
+            "#476B2D",
+            "#8C5700",
+            "#006B69",
+            "#4564A0",
+            "#835297",
+            "#A04463",
+            "#985236",
+            "#4D6846"
+          ]
+        },
+        "compound": {
+          "--cpd-color-icon-accent-tertiary": "#476B2D",
+          "--cpd-color-text-action-accent": "#476B2D"
+        }
+      },
+      {
+        "name": "Lemon at Dusk",
+        "is_dark": true,
+        "colors": {
+          "accent-color": "#DCCB6D",
+          "primary-color": "#8BAF68",
+          "warning-color": "#FF9386",
+          "sidebar-color": "#17251C",
+          "roomlist-background-color": "#1D2A21",
+          "roomlist-text-color": "#F0F2DA",
+          "roomlist-text-secondary-color": "#BAC5AD",
+          "roomlist-highlights-color": "#344332",
+          "roomlist-separator-color": "#43513C",
+          "timeline-background-color": "#172019",
+          "timeline-text-color": "#F0F2DA",
+          "timeline-text-secondary-color": "#BAC5AD",
+          "timeline-highlights-color": "#2D3B2B",
+          "username-colors": [
+            "#C6DA83",
+            "#E9C878",
+            "#88D1CA",
+            "#A8C4F0",
+            "#CFB2E7",
+            "#EEAEC1",
+            "#EBC0A1",
+            "#B7D5A4"
+          ],
+          "avatar-background-colors": [
+            "#476B2D",
+            "#8C5700",
+            "#006B69",
+            "#4564A0",
+            "#835297",
+            "#A04463",
+            "#985236",
+            "#4D6846"
+          ]
+        },
+        "compound": {
+          "--cpd-color-icon-accent-tertiary": "#DCCB6D",
+          "--cpd-color-text-action-accent": "#DCCB6D"
+        }
+      }
+    ]
+  }
+}

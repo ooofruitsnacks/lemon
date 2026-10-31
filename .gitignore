@@ -9,6 +9,11 @@ node_modules
 package-lock.json
 .DS_Store
 **/.idea
+# Lemon generated outputs
+/lemon/generated/
+/lemon-out/
+/release/
+/downloaded/
 /webpack-stats.json
 /.tmp
 .vscode

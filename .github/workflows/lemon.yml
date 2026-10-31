@@ -1,0 +1,278 @@
+name: Lemon builds and releases
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lemon-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  CI: "true"
+  NX_DAEMON: "false"
+  NX_NO_CLOUD: "true"
+  NODE_OPTIONS: "--max-old-space-size=6144"
+
+jobs:
+  web:
+    name: Build Lemon web application
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.13"
+
+      - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4
+        with:
+          node-version-file: apps/desktop/.node-version
+          cache: true
+          install: false
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build branded application
+        run: node lemon/build.mjs web
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: lemon-webapp
+          path: apps/desktop/webapp.asar
+          if-no-files-found: error
+          retention-days: 7
+
+  desktop:
+    name: ${{ matrix.platform }} / ${{ matrix.arch }}
+    needs: web
+
+    # Store signing credentials in this protected environment,
+    # not as repository-wide secrets.
+    environment: ${{ startsWith(github.ref, 'refs/tags/v') && 'release-signing' || '' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            runner: ubuntu-22.04
+            arch: x64
+          - platform: linux
+            runner: ubuntu-22.04-arm
+            arch: arm64
+          - platform: macos
+            runner: macos-15-intel
+            arch: x64
+          - platform: macos
+            runner: macos-15
+            arch: arm64
+          - platform: windows
+            runner: windows-2025
+            arch: x64
+          - platform: windows
+            runner: windows-11-arm
+            arch: arm64
+
+    runs-on: ${{ matrix.runner }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Configure Windows checkout line endings
+        if: runner.os == 'Windows'
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.13"
+
+      - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4
+        with:
+          node-version-file: apps/desktop/.node-version
+          cache: true
+          install: false
+
+      - name: Install Linux packaging tools
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential ruby-dev rpm \
+            squashfs-tools libarchive-tools \
+            desktop-file-utils xvfb xauth \
+            libgtk-3-0 libnss3 libasound2 libgbm1 \
+            libsecret-1-dev libnotify4 libxss1 libxtst6
+          sudo gem install --no-document fpm -v 1.17.0
+
+      - name: Install macOS DMG support
+        if: runner.os == 'macOS'
+        run: python -m pip install pyobjc-framework-Quartz
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile --filter element-desktop
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: lemon-webapp
+          path: apps/desktop
+
+      - name: Build packages and run native smoke checks
+        run: node lemon/build.mjs desktop "${{ matrix.arch }}"
+        env:
+          USE_SYSTEM_FPM: "true"
+          USE_HARD_LINKS: "false"
+          CSC_LINK: ${{ matrix.platform == 'macos' && secrets.MAC_CSC_LINK || matrix.platform == 'windows' && secrets.WIN_CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ matrix.platform == 'macos' && secrets.MAC_CSC_KEY_PASSWORD || matrix.platform == 'windows' && secrets.WIN_CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Check Linux glibc requirements
+        if: runner.os == 'Linux'
+        env:
+          MAX_GLIBC: "2.35"
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r -d '' file; do
+            bash apps/desktop/scripts/glibc-check.sh "$file"
+          done < <(
+            find apps/desktop/dist \
+              -type f \( -name '*.node' -o -name lemon \) -print0
+          )
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: lemon-${{ matrix.platform }}-${{ matrix.arch }}
+          path: lemon-out/*
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Assemble draft release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: desktop
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: lemon-*
+          path: downloaded
+          merge-multiple: false
+
+      - name: Collect desktop release artifacts
+        run: |
+          mkdir -p release
+
+          find downloaded \
+            -path '*/lemon-webapp/*' -prune -o \
+            -type f -exec cp '{}' release/ \;
+
+      - name: Generate distro recipes and source archive
+        run: python3 lemon/release.py release
+
+      # These are binary-repackaging jobs, not cross-compilation.
+      # Each package contains the corresponding already-built native executable.
+      - name: Build Arch and Arch Linux ARM packages
+        run: |
+          set -euo pipefail
+
+          for arch in x86_64 aarch64; do
+            docker run --rm \
+              -e ARCH="$arch" \
+              -v "$PWD/release:/work" \
+              archlinux:base-devel \
+              bash -euc '
+                useradd -m builder
+                chown -R builder:builder /work
+
+                cp /etc/makepkg.conf /tmp/lemon-makepkg.conf
+                printf "\nCARCH=%s\nPKGDEST=/work\nSRCDEST=/work\n" \
+                  "$ARCH" >> /tmp/lemon-makepkg.conf
+
+                su builder -c "
+                  cd /work &&
+                  makepkg \
+                    --config /tmp/lemon-makepkg.conf \
+                    --nodeps \
+                    --force \
+                    --cleanbuild
+                "
+              '
+          done
+
+      - name: Generate SHA-256 checksums
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+
+          directory = Path("release")
+          lines = []
+
+          for path in sorted(directory.iterdir()):
+              if not path.is_file() or path.name == "SHA256SUMS":
+                  continue
+
+              digest = hashlib.sha256()
+              with path.open("rb") as stream:
+                  for block in iter(lambda: stream.read(1024 * 1024), b""):
+                      digest.update(block)
+
+              lines.append(f"{digest.hexdigest()}  {path.name}")
+
+          (directory / "SHA256SUMS").write_text(
+              "\n".join(lines) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Create draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          mapfile -t assets < <(
+            find release -maxdepth 1 -type f | sort
+          )
+
+          gh release create "$GITHUB_REF_NAME" \
+            "${assets[@]}" \
+            --verify-tag \
+            --draft \
+            --title "Lemon $GITHUB_REF_NAME" \
+            --notes \
+            "Lemon release candidate. Includes native desktop packages,
+            Arch packages, a Nix recipe, a Gentoo binary overlay,
+            source archive, build information, and SHA-256 checksums.
+
+            Review signing status and complete platform, authentication,
+            encryption, recovery, and calling tests before publishing."
