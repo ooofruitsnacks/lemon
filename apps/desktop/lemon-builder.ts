@@ -13,6 +13,12 @@ const project = JSON.parse(
 );
 
 const repository = `https://github.com/${project.repository}`;
+const maintainerName = "Lemon contributors";
+
+const maintainerEmail = "467487@pm.me";
+
+const maintainer = `${maintainerName} <${maintainerEmail}>`;
+
 const platform = {
     darwin: "macos",
     win32: "windows",
@@ -49,7 +55,10 @@ export default {
     extraMetadata: {
         ...upstream.extraMetadata,
         version: project.version,
-        author: "Lemon contributors",
+        author: {
+            name: maintainerName,
+            email: maintainerEmail,
+        },
         homepage: repository,
         repository: {
             type: "git",
@@ -84,7 +93,7 @@ export default {
 
     deb: {
         ...upstream.deb,
-        maintainer: "Lemon contributors",
+        maintainer,
         recommends: [],
         depends: [
             "libc6 (>= 2.35)",
@@ -107,6 +116,7 @@ export default {
 
     rpm: {
         vendor: "Lemon contributors",
+        maintainer,
         depends: [
             "gtk3",
             "nss",

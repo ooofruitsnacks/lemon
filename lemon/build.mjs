@@ -306,35 +306,58 @@ if (stage === "web") {
     rmSync(out, { recursive: true, force: true });
     mkdirSync(out);
 
-    const prefix = `Lemon-${project.version}-${platform}-${arch}.`;
     const suffixes = {
         linux: [".deb", ".rpm", ".AppImage", ".tar.gz"],
         macos: [".dmg", ".zip"],
         windows: [".exe", ".zip"],
     }[platform];
 
-    const files = readdirSync(dist).filter((name) => name.startsWith(prefix));
+    // electron-builder uses distribution-specific architecture names
+    // in some Linux artifact filenames.
+    const linuxArtifactArch = {
+        x64: {
+            ".deb": "amd64",
+            ".rpm": "x86_64",
+            ".AppImage": "x86_64",
+            ".tar.gz": "x64",
+        },
+        arm64: {
+            ".deb": "arm64",
+            ".rpm": "aarch64",
+            ".AppImage": "arm64",
+            ".tar.gz": "arm64",
+        },
+    };
 
     for (const suffix of suffixes) {
-        const file = files.find((name) => name.endsWith(suffix));
-        assert(file, `Expected release artifact missing: ${suffix}`);
-        copyFileSync(join(dist, file), join(out, file));
-    }
+        const nativeArch =
+            platform === "linux"
+                ? linuxArtifactArch[arch][suffix]
+                : arch;
 
-    writeJson(join(out, `build-info-${platform}-${arch}.json`), {
-        version: project.version,
-        platform,
-        architecture: arch,
-        upstreamCommit: project.upstreamCommit,
-        lemonCommit: process.env.GITHUB_SHA || null,
-        signingRequested: Boolean(env.CSC_LINK),
-        checks: [
-            "packaged identity",
-            "embedded configuration",
-            "executable architecture",
-            "isolated native --help launch",
-        ],
-    });
+        // Keep published filenames consistent with release.py and
+        // the generated Arch, Gentoo, and Nix packaging recipes.
+        const publishedName =
+            `Lemon-${project.version}-${platform}-${arch}${suffix}`;
+
+        const nativeName =
+            `Lemon-${project.version}-${platform}-${nativeArch}${suffix}`;
+
+        const candidates = [...new Set([nativeName, publishedName])];
+        const sourceName = candidates.find((name) =>
+            existsSync(join(dist, name)),
+        );
+
+        assert(
+            sourceName,
+            `Expected release artifact missing. Tried: ${candidates.join(", ")}`,
+        );
+
+        copyFileSync(
+            join(dist, sourceName),
+            join(out, publishedName),
+        );
+    }
 } else {
     throw new Error("Usage: node lemon/build.mjs web|desktop [x64|arm64]");
 }
