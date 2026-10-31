@@ -18,7 +18,7 @@
   "setting_defaults": {
     "custom_themes": [
       {
-        "name": "Lemon Summer Breeze",
+        "name": "Lemon Matrix Client",
         "is_dark": false,
         "colors": {
           "accent-color": "#476B2D",
