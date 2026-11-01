@@ -1,0 +1,113 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+
+/*
+ * Only apply to Lemon's two pastel themes.
+ * Do not override other themes or the operating system's
+ * forced-colors / increased-contrast preference.
+ */
+@media (forced-colors: none) and (prefers-contrast: no-preference) {
+    body[data-lemon-theme] {
+        background-color: var(--lemon-canvas);
+        color: var(--lemon-text);
+        font-family: var(--font-family) !important;
+        font-feature-settings: "liga" 0, "calt" 0 !important;
+    }
+
+    /* Leftmost spaces/navigation rail. */
+    body[data-lemon-theme] .mx_SpacePanel {
+        background-color: var(--lemon-rail) !important;
+        border-right: 2px solid var(--lemon-border);
+    }
+
+    /* Room-list sidebar, including the newer room list container. */
+    body[data-lemon-theme] :is(
+        .mx_LeftPanel,
+        .mx_LeftPanel_roomListContainer,
+        .mx_RoomListPanel
+    ) {
+        --cpd-color-bg-canvas-default: var(--lemon-sidebar);
+        background-color: var(--lemon-sidebar) !important;
+    }
+
+    /* Room header / in-app top navigation. */
+    body[data-lemon-theme] .mx_RoomHeader {
+        background-color: var(--lemon-header) !important;
+        border-bottom: 2px solid var(--lemon-border);
+        border-radius: 0 0 18px 18px;
+        box-shadow: 0 3px 0 rgb(57 83 39 / 8%);
+    }
+
+    body[data-lemon-theme] .mx_RoomHeader:hover {
+        background-color: var(--lemon-header) !important;
+    }
+
+    /* Secondary information panel. */
+    body[data-lemon-theme] .mx_RightPanel {
+        --cpd-color-bg-canvas-default: var(--lemon-header);
+        background-color: var(--lemon-header) !important;
+        border-left: 2px solid var(--lemon-border);
+    }
+
+    /* Menus get a small "illustrated card" treatment. */
+    body[data-lemon-theme] :is(
+        .mx_ContextualMenu,
+        [role="menu"]
+    ) {
+        --cpd-color-bg-canvas-default: var(--lemon-menu);
+        background-color: var(--lemon-menu) !important;
+        border: 2px solid var(--lemon-border);
+        border-radius: 18px;
+        box-shadow: 3px 4px 0 rgb(57 83 39 / 14%);
+    }
+
+    /*
+     * Style ordinary dialogs, but leave image/video lightboxes alone.
+     * Do not change positioning, scrolling, or dialog dimensions.
+     */
+    body[data-lemon-theme]
+    .mx_Dialog:not(.mx_Dialog_lightbox .mx_Dialog) {
+        background-color: var(--lemon-menu) !important;
+        border: 2px solid var(--lemon-border);
+        border-radius: 22px;
+        box-shadow: 4px 5px 0 rgb(57 83 39 / 14%);
+    }
+
+    /* Composer surround. Preserve editor sizing and behavior. */
+    body[data-lemon-theme] .mx_MessageComposer {
+        background-color: var(--lemon-header) !important;
+        border-top: 2px solid var(--lemon-border);
+        border-radius: 18px 18px 0 0;
+    }
+
+    /* Softly rounded spaces without changing avatar geometry. */
+    body[data-lemon-theme] .mx_SpaceButton_selectionWrapper {
+        border-radius: 14px;
+    }
+
+    body[data-lemon-theme]
+    .mx_SpaceButton_active
+    .mx_SpaceButton_selectionWrapper {
+        background-color: var(--lemon-hover) !important;
+    }
+
+    /* Keep native action/error colors; only soften button corners. */
+    body[data-lemon-theme] :is(
+        button,
+        .mx_AccessibleButton
+    ) {
+        border-radius: 12px;
+    }
+
+    /* Clear keyboard focus, independent of mouse hover. */
+    body[data-lemon-theme] :is(
+        button,
+        a,
+        input,
+        textarea,
+        [role="button"],
+        [tabindex]
+    ):focus-visible {
+        outline: 3px solid #416B35 !important;
+        outline-offset: 2px;
+    }
+}

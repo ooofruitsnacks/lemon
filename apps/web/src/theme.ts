@@ -329,16 +329,25 @@ export async function setTheme(theme?: string): Promise<void> {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
     }
-    clearCustomTheme();
+        clearCustomTheme();
+
+    if (
+        theme === "custom-Lemon Summer Breeze" ||
+        theme === "custom-Lemon at Dusk"
+    ) {
+        document.body.dataset.lemonTheme = theme;
+    } else {
+        delete document.body.dataset.lemonTheme;
+    }
+
     let stylesheetName = theme;
+
     if (theme.startsWith("custom-")) {
         const customTheme = getCustomTheme(theme.slice(7));
         stylesheetName = customTheme.is_dark ? "dark-custom" : "light-custom";
         setCustomThemeVars(customTheme);
     }
 
-    // look for the stylesheet elements.
-    // styleElements is a map from style name to HTMLLinkElement.
     const styleElements = new Map<string, HTMLLinkElement>();
     const themes = Array.from(document.querySelectorAll<HTMLLinkElement>("[data-mx-theme]"));
     themes.forEach((theme) => {

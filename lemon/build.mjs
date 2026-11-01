@@ -162,12 +162,48 @@ if (stage === "web") {
         copyFileSync(join(generated, name), join(webapp, name));
     }
 
-    const indexPath = join(webapp, "index.html");
-    const html = readFileSync(indexPath, "utf8");
-    writeFileSync(
-        indexPath,
-        html.replace(/<title>[\s\S]*?<\/title>/i, "<title>Lemon</title>"),
+        // Bundle Lemon's additional stylesheet.
+    copyFileSync(
+        join(root, "lemon/cartoon.css"),
+        join(webapp, "lemon-cartoon.css"),
     );
+
+    // Bundle font files and their redistribution license.
+    const fontOutput = join(webapp, "lemon-fonts");
+    mkdirSync(fontOutput, { recursive: true });
+
+    for (const name of [
+        "JetBrainsMono-Regular.ttf",
+        "JetBrainsMono-Bold.ttf",
+        "OFL.txt",
+    ]) {
+        const source = join(root, "lemon/fonts", name);
+        assert(existsSync(source), `Missing bundled font asset: ${source}`);
+        copyFileSync(source, join(fontOutput, name));
+    }
+
+    const indexPath = join(webapp, "index.html");
+    let html = readFileSync(indexPath, "utf8");
+
+    html = html.replace(
+        /<title>[\s\S]*?<\/title>/i,
+        "<title>Lemon</title>",
+    );
+
+    assert(
+        /<\/head>/i.test(html),
+        "Cannot insert Lemon stylesheet: missing HTML head.",
+    );
+
+    if (!html.includes('id="lemon-cartoon-theme"')) {
+        html = html.replace(
+            /<\/head>/i,
+            '<link id="lemon-cartoon-theme" rel="stylesheet" ' +
+            'href="lemon-cartoon.css">\n</head>',
+        );
+    }
+
+    writeFileSync(indexPath, html);
 
     run(
         "pnpm",

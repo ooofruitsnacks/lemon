@@ -18,89 +18,211 @@
   "setting_defaults": {
     "custom_themes": [
       {
-        "name": "Lemon",
+        "name": "Lemon Summer Breeze",
         "is_dark": false,
+        "fonts": {
+          "faces": [
+            {
+              "font-family": "JetBrains Mono",
+              "font-style": "normal",
+              "font-weight": "400",
+              "font-display": "swap",
+              "src": [
+                {
+                  "url": "lemon-fonts/JetBrainsMono-Regular.ttf",
+                  "format": "truetype"
+                }
+              ]
+            },
+            {
+              "font-family": "JetBrains Mono",
+              "font-style": "normal",
+              "font-weight": "700",
+              "font-display": "swap",
+              "src": [
+                {
+                  "url": "lemon-fonts/JetBrainsMono-Bold.ttf",
+                  "format": "truetype"
+                }
+              ]
+            }
+          ],
+          "general": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace",
+          "monospace": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace"
+        },
         "colors": {
-          "accent-color": "#476B2D",
-          "primary-color": "#476B2D",
-          "warning-color": "#B93832",
-          "sidebar-color": "#F2DD79",
-          "roomlist-background-color": "#FFF8D7",
-          "roomlist-text-color": "#263A2B",
-          "roomlist-text-secondary-color": "#52634C",
-          "roomlist-highlights-color": "#E5EFCA",
-          "roomlist-separator-color": "#D8DAB7",
-          "timeline-background-color": "#FFFEF6",
-          "timeline-text-color": "#25362B",
-          "timeline-text-secondary-color": "#596653",
-          "timeline-highlights-color": "#F4F1CC",
+          "accent-color": "#416B35",
+          "primary-color": "#416B35",
+          "warning-color": "#AF352F",
+          "sidebar-color": "#D0E8A8",
+          "roomlist-background-color": "#F8EDAC",
+          "roomlist-text-color": "#283D2B",
+          "roomlist-text-secondary-color": "#52654A",
+          "roomlist-highlights-color": "#E4EBAC",
+          "roomlist-separator-color": "#94AA75",
+          "timeline-background-color": "#FFF8DC",
+          "timeline-text-color": "#283D2B",
+          "timeline-text-secondary-color": "#52654A",
+          "timeline-highlights-color": "#E4EBAC",
           "username-colors": [
-            "#476B2D",
-            "#8C5700",
-            "#006B69",
-            "#4564A0",
-            "#835297",
-            "#A04463",
-            "#985236",
-            "#4D6846"
+            "#395F32",
+            "#815600",
+            "#006963",
+            "#435C94",
+            "#79518A",
+            "#994460",
+            "#875135",
+            "#4D6642"
           ],
           "avatar-background-colors": [
-            "#476B2D",
-            "#8C5700",
-            "#006B69",
-            "#4564A0",
-            "#835297",
-            "#A04463",
-            "#985236",
-            "#4D6846"
-          ]
+            "#395F32",
+            "#815600",
+            "#006963",
+            "#435C94",
+            "#79518A",
+            "#994460",
+            "#875135",
+            "#4D6642"
+          ],
+          "lemon-rail": "#D0E8A8",
+          "lemon-sidebar": "#F8EDAC",
+          "lemon-header": "#DDF0C5",
+          "lemon-canvas": "#FFF8DC",
+          "lemon-menu": "#F4F1C5",
+          "lemon-hover": "#E4EBAC",
+          "lemon-border": "#94AA75",
+          "lemon-text": "#283D2B"
         },
         "compound": {
-          "--cpd-color-icon-accent-tertiary": "#476B2D",
-          "--cpd-color-text-action-accent": "#476B2D"
+          "--cpd-font-family-sans": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace",
+          "--cpd-color-bg-canvas-default": "#FFF8DC",
+          "--cpd-color-bg-canvas-disabled": "#F8EDAC",
+          "--cpd-color-bg-subtle-primary": "#F8EDAC",
+          "--cpd-color-bg-subtle-secondary": "#F4F1C5",
+          "--cpd-color-bg-subtle-tertiary": "#DDF0C5",
+          "--cpd-color-bg-action-primary-rest": "#416B35",
+          "--cpd-color-bg-action-primary-hovered": "#34592B",
+          "--cpd-color-bg-action-primary-pressed": "#294823",
+          "--cpd-color-bg-action-secondary-rest": "#F4F1C5",
+          "--cpd-color-bg-action-secondary-hovered": "#E4EBAC",
+          "--cpd-color-bg-action-secondary-pressed": "#DDF0C5",
+          "--cpd-color-bg-action-tertiary-hovered": "#E4EBAC",
+          "--cpd-color-text-primary": "#283D2B",
+          "--cpd-color-text-secondary": "#52654A",
+          "--cpd-color-text-action-primary": "#283D2B",
+          "--cpd-color-text-action-accent": "#416B35",
+          "--cpd-color-text-on-solid-primary": "#FFF8CB",
+          "--cpd-color-icon-primary": "#283D2B",
+          "--cpd-color-icon-secondary": "#52654A",
+          "--cpd-color-icon-accent-tertiary": "#416B35",
+          "--cpd-color-icon-on-solid-primary": "#FFF8CB",
+          "--cpd-color-border-interactive-primary": "#416B35",
+          "--cpd-color-border-interactive-secondary": "#94AA75",
+          "--cpd-color-border-focused": "#416B35"
         }
       },
       {
         "name": "Lemon at Dusk",
-        "is_dark": true,
+        "is_dark": false,
+        "fonts": {
+          "faces": [
+            {
+              "font-family": "JetBrains Mono",
+              "font-style": "normal",
+              "font-weight": "400",
+              "font-display": "swap",
+              "src": [
+                {
+                  "url": "lemon-fonts/JetBrainsMono-Regular.ttf",
+                  "format": "truetype"
+                }
+              ]
+            },
+            {
+              "font-family": "JetBrains Mono",
+              "font-style": "normal",
+              "font-weight": "700",
+              "font-display": "swap",
+              "src": [
+                {
+                  "url": "lemon-fonts/JetBrainsMono-Bold.ttf",
+                  "format": "truetype"
+                }
+              ]
+            }
+          ],
+          "general": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace",
+          "monospace": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace"
+        },
         "colors": {
-          "accent-color": "#DCCB6D",
-          "primary-color": "#8BAF68",
-          "warning-color": "#FF9386",
-          "sidebar-color": "#17251C",
-          "roomlist-background-color": "#1D2A21",
-          "roomlist-text-color": "#F0F2DA",
-          "roomlist-text-secondary-color": "#BAC5AD",
-          "roomlist-highlights-color": "#344332",
-          "roomlist-separator-color": "#43513C",
-          "timeline-background-color": "#172019",
-          "timeline-text-color": "#F0F2DA",
-          "timeline-text-secondary-color": "#BAC5AD",
-          "timeline-highlights-color": "#2D3B2B",
+          "accent-color": "#416B35",
+          "primary-color": "#416B35",
+          "warning-color": "#AF352F",
+          "sidebar-color": "#BECEA0",
+          "roomlist-background-color": "#E1DDA8",
+          "roomlist-text-color": "#283D2B",
+          "roomlist-text-secondary-color": "#52654A",
+          "roomlist-highlights-color": "#D1D8A0",
+          "roomlist-separator-color": "#94AA75",
+          "timeline-background-color": "#EDE8CB",
+          "timeline-text-color": "#283D2B",
+          "timeline-text-secondary-color": "#52654A",
+          "timeline-highlights-color": "#D1D8A0",
           "username-colors": [
-            "#C6DA83",
-            "#E9C878",
-            "#88D1CA",
-            "#A8C4F0",
-            "#CFB2E7",
-            "#EEAEC1",
-            "#EBC0A1",
-            "#B7D5A4"
+            "#395F32",
+            "#815600",
+            "#006963",
+            "#435C94",
+            "#79518A",
+            "#994460",
+            "#875135",
+            "#4D6642"
           ],
           "avatar-background-colors": [
-            "#476B2D",
-            "#8C5700",
-            "#006B69",
-            "#4564A0",
-            "#835297",
-            "#A04463",
-            "#985236",
-            "#4D6846"
-          ]
+            "#395F32",
+            "#815600",
+            "#006963",
+            "#435C94",
+            "#79518A",
+            "#994460",
+            "#875135",
+            "#4D6642"
+          ],
+          "lemon-rail": "#BECEA0",
+          "lemon-sidebar": "#E1DDA8",
+          "lemon-header": "#CBDCB5",
+          "lemon-canvas": "#EDE8CB",
+          "lemon-menu": "#E4E1BC",
+          "lemon-hover": "#D1D8A0",
+          "lemon-border": "#94AA75",
+          "lemon-text": "#283D2B"
         },
         "compound": {
-          "--cpd-color-icon-accent-tertiary": "#DCCB6D",
-          "--cpd-color-text-action-accent": "#DCCB6D"
+          "--cpd-font-family-sans": "\"JetBrains Mono\", \"Twemoji\", \"Apple Color Emoji\", \"Segoe UI Emoji\", monospace",
+          "--cpd-color-bg-canvas-default": "#EDE8CB",
+          "--cpd-color-bg-canvas-disabled": "#E1DDA8",
+          "--cpd-color-bg-subtle-primary": "#E1DDA8",
+          "--cpd-color-bg-subtle-secondary": "#E4E1BC",
+          "--cpd-color-bg-subtle-tertiary": "#CBDCB5",
+          "--cpd-color-bg-action-primary-rest": "#416B35",
+          "--cpd-color-bg-action-primary-hovered": "#34592B",
+          "--cpd-color-bg-action-primary-pressed": "#294823",
+          "--cpd-color-bg-action-secondary-rest": "#E4E1BC",
+          "--cpd-color-bg-action-secondary-hovered": "#D1D8A0",
+          "--cpd-color-bg-action-secondary-pressed": "#CBDCB5",
+          "--cpd-color-bg-action-tertiary-hovered": "#D1D8A0",
+          "--cpd-color-text-primary": "#283D2B",
+          "--cpd-color-text-secondary": "#52654A",
+          "--cpd-color-text-action-primary": "#283D2B",
+          "--cpd-color-text-action-accent": "#416B35",
+          "--cpd-color-text-on-solid-primary": "#FFF8CB",
+          "--cpd-color-icon-primary": "#283D2B",
+          "--cpd-color-icon-secondary": "#52654A",
+          "--cpd-color-icon-accent-tertiary": "#416B35",
+          "--cpd-color-icon-on-solid-primary": "#FFF8CB",
+          "--cpd-color-border-interactive-primary": "#416B35",
+          "--cpd-color-border-interactive-secondary": "#94AA75",
+          "--cpd-color-border-focused": "#416B35"
         }
       }
     ]
