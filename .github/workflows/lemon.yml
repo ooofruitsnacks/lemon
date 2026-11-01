@@ -265,7 +265,7 @@ jobs:
                 "
               '
           done
-          sudo chown -R "$(id -u):$(id-g)" release
+          sudo chown -R "$USER" release
 
       - name: Generate SHA-256 checksums
         run: |
