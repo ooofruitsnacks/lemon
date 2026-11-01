@@ -166,7 +166,23 @@ jobs:
             done
           fi
 
-          node lemon/build.mjs desktop "${{ matrix.arch }}"
+                    attempts=1
+          if [[ "$RUNNER_OS" == "macOS" && "$GITHUB_REF" == refs/tags/v* ]]; then
+            attempts=3   # notarizing and stapling depend on Apple's servers
+          fi
+
+          for i in $(seq 1 "$attempts"); do
+            if node lemon/build.mjs desktop "${{ matrix.arch }}"; then
+              exit 0
+            fi
+            if (( i < attempts )); then
+              echo "::warning::Build attempt $i of $attempts failed. Retrying in 60 seconds..."
+              sleep 60
+            fi
+          done
+
+          echo "::error::Build failed after $attempts attempts"
+          exit 1
 
       - name: Check Linux glibc requirements
         if: runner.os == 'Linux'
