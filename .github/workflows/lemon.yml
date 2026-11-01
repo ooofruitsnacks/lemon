@@ -190,7 +190,7 @@ jobs:
           retention-days: 14
 
   release:
-    name: Assemble draft release
+    name: Publish Release
     if: startsWith(github.ref, 'refs/tags/v')
     needs: desktop
     runs-on: ubuntu-24.04
@@ -275,25 +275,17 @@ jobs:
           )
           PY
 
-      - name: Create draft GitHub release
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Lemon ${{ github.ref_name }}
+          files: release/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          make_latest: "true"
         env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
+          GITHUB_TOKEN: ${{ github.token }}
 
-          mapfile -t assets < <(
-            find release -maxdepth 1 -type f | sort
-          )
-
-          gh release create "$GITHUB_REF_NAME" \
-            "${assets[@]}" \
-            --verify-tag \
-            --title "Lemon $GITHUB_REF_NAME" \
-            --notes \
-            "Lemon release candidate. Includes native desktop packages,
-            Arch packages, a Nix recipe, a Gentoo binary overlay,
-            source archive, build information, and SHA-256 checksums.
-
-            Review signing status and complete platform, authentication,
-            encryption, recovery, and calling tests before publishing."
