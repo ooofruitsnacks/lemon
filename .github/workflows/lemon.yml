@@ -289,7 +289,6 @@ jobs:
           gh release create "$GITHUB_REF_NAME" \
             "${assets[@]}" \
             --verify-tag \
-            --draft \
             --title "Lemon $GITHUB_REF_NAME" \
             --notes \
             "Lemon release candidate. Includes native desktop packages,
