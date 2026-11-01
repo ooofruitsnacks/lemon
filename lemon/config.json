@@ -18,7 +18,7 @@
   "setting_defaults": {
     "custom_themes": [
       {
-        "name": "Lemon Matrix Client",
+        "name": "Lemon",
         "is_dark": false,
         "colors": {
           "accent-color": "#476B2D",
