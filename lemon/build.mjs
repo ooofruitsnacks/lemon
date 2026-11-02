@@ -125,7 +125,7 @@ const variantPath = join(generated, "variant.json");
 writeJson(variantPath, {
     name: "lemon",
     productName: "Lemon",
-    description: "A refreshing, open-source Matrix chat client",
+    description: "An open-source Matrix chat client",
     appId: `io.github.${owner}.lemon`,
     protocols: ["lemon"],
 });

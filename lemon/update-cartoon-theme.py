@@ -105,7 +105,97 @@ def make_theme(name, rail, sidebar, header, canvas, menu, hover):
             "--cpd-color-border-focused": accent,
         },
     }
+def make_dusk_theme():
+    # Distinct forest-green surfaces, rather than tinted light backgrounds.
+    rail = "#11271D"
+    sidebar = "#1A3326"
+    header = "#234331"
+    canvas = "#142B20"
+    menu = "#203C2C"
+    hover = "#34533A"
 
+    text = "#F3F0CE"
+    secondary = "#BFCDB3"
+    accent = "#F0D96A"
+    border = "#65815A"
+    on_accent = "#192D20"
+
+    theme = make_theme(
+        "Lemon at Dusk",
+        rail=rail,
+        sidebar=sidebar,
+        header=header,
+        canvas=canvas,
+        menu=menu,
+        hover=hover,
+    )
+
+    # Use the actual dark base styles for components not explicitly themed.
+    theme["is_dark"] = True
+
+    theme["colors"].update({
+        "accent-color": accent,
+        "primary-color": accent,
+        "warning-color": "#FFABA0",
+
+        "roomlist-text-color": text,
+        "roomlist-text-secondary-color": secondary,
+        "roomlist-separator-color": border,
+
+        "timeline-text-color": text,
+        "timeline-text-secondary-color": secondary,
+
+        # Bright names on dark surfaces; keep avatar backgrounds darker
+        # so their light initials remain readable.
+        "username-colors": [
+            "#E8D777",
+            "#B8DA97",
+            "#91D6BB",
+            "#A9C8ED",
+            "#D3B9E7",
+            "#EDB3C5",
+            "#EAC09A",
+            "#C7D9A0",
+        ],
+        "avatar-background-colors": [
+            "#456237",
+            "#715B20",
+            "#296352",
+            "#405878",
+            "#654E76",
+            "#79475D",
+            "#765236",
+            "#536537",
+        ],
+
+        # Used by the existing rounded-panel CSS.
+        "lemon-border": border,
+        "lemon-text": text,
+        "lemon-focus": accent,
+    })
+
+    theme["compound"].update({
+        "--cpd-color-text-primary": text,
+        "--cpd-color-text-secondary": secondary,
+        "--cpd-color-text-action-primary": text,
+        "--cpd-color-text-action-accent": accent,
+        "--cpd-color-text-on-solid-primary": on_accent,
+
+        "--cpd-color-icon-primary": text,
+        "--cpd-color-icon-secondary": secondary,
+        "--cpd-color-icon-accent-tertiary": accent,
+        "--cpd-color-icon-on-solid-primary": on_accent,
+
+        "--cpd-color-bg-action-primary-rest": accent,
+        "--cpd-color-bg-action-primary-hovered": "#F8E58B",
+        "--cpd-color-bg-action-primary-pressed": "#DCC251",
+
+        "--cpd-color-border-interactive-primary": accent,
+        "--cpd-color-border-interactive-secondary": border,
+        "--cpd-color-border-focused": accent,
+    })
+
+    return theme
 
 config = json.loads(CONFIG.read_text(encoding="utf-8"))
 settings = config.setdefault("setting_defaults", {})
@@ -128,15 +218,7 @@ settings["custom_themes"] = [
         menu="#F4F1C5",
         hover="#E4EBAC",
     ),
-    make_theme(
-        "Lemon at Dusk",
-        rail="#BECEA0",
-        sidebar="#E1DDA8",
-        header="#CBDCB5",
-        canvas="#EDE8CB",
-        menu="#E4E1BC",
-        hover="#D1D8A0",
-    ),
+    make_dusk_theme(),
     *other_themes,
 ]
 
@@ -147,4 +229,4 @@ CONFIG.write_text(
     encoding="utf-8",
 )
 
-print("Updated Lemon's pastel themes and bundled font settings.")
+print("Updated Lemon's theme settings.")

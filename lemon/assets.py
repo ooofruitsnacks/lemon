@@ -7,16 +7,9 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="112" fill="#e8f4de"/>
-<ellipse cx="327" cy="128" rx="83" ry="32"
- transform="rotate(-30 327 128)" fill="#537b3b"/>
-<ellipse cx="256" cy="287" rx="163" ry="116"
- transform="rotate(-25 256 287)" fill="#efd148"/>
-<ellipse cx="218" cy="243" rx="65" ry="18"
- transform="rotate(-25 218 243)" fill="#fff4ad"/>
-</svg>
-"""
+SVG = (ROOT / "lemon/branding/lemon-logo.svg").read_text(
+    encoding="utf-8"
+)
 
 BREEZE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
 <defs>

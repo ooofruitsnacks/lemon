@@ -107,7 +107,35 @@
         [role="button"],
         [tabindex]
     ):focus-visible {
-        outline: 3px solid #416B35 !important;
+        outline: 3px solid var(--lemon-focus, #416B35) !important;
         outline-offset: 2px;
+    }
+}
+/* Dusk-specific details. Preserve accessibility-mode overrides. */
+@media (forced-colors: none) and (prefers-contrast: no-preference) {
+    body[data-lemon-theme="custom-Lemon at Dusk"] {
+        color-scheme: dark;
+        accent-color: var(--lemon-focus);
+    }
+
+    body[data-lemon-theme="custom-Lemon at Dusk"] ::selection {
+        background-color: #F0D96A;
+        color: #192D20;
+    }
+
+    body[data-lemon-theme="custom-Lemon at Dusk"] .mx_RoomHeader {
+        box-shadow: 0 3px 0 rgb(5 16 10 / 28%);
+    }
+
+    body[data-lemon-theme="custom-Lemon at Dusk"] :is(
+        .mx_ContextualMenu,
+        [role="menu"]
+    ) {
+        box-shadow: 3px 4px 0 rgb(5 16 10 / 38%);
+    }
+
+    body[data-lemon-theme="custom-Lemon at Dusk"]
+    .mx_Dialog:not(.mx_Dialog_lightbox .mx_Dialog) {
+        box-shadow: 4px 5px 0 rgb(5 16 10 / 38%);
     }
 }
