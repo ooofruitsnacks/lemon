@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 from pathlib import Path
-import math
 import struct
 import zlib
 
@@ -37,45 +36,8 @@ def chunk(kind, data):
     )
 
 
-def inside_ellipse(x, y, cx, cy, rx, ry, angle):
-    dx, dy = x - cx, y - cy
-    c, s = math.cos(angle), math.sin(angle)
-    u, v = c * dx + s * dy, -s * dx + c * dy
-    return (u / rx) ** 2 + (v / ry) ** 2 <= 1
-
-
 def png(size):
-    rows = bytearray()
-
-    for py in range(size):
-        rows.append(0)
-
-        for px in range(size):
-            x, y = (px + 0.5) / size, (py + 0.5) / size
-            color = (232, 244, 222, 255)
-
-            # Rounded-square background.
-            dx = max(0, abs(x - 0.5) - 0.28)
-            dy = max(0, abs(y - 0.5) - 0.28)
-            if dx * dx + dy * dy > 0.22 * 0.22:
-                color = (0, 0, 0, 0)
-
-            if inside_ellipse(x, y, .64, .25, .162, .063, -.52):
-                color = (83, 123, 59, 255)
-            if inside_ellipse(x, y, .50, .56, .318, .227, -.44):
-                color = (239, 209, 72, 255)
-            if inside_ellipse(x, y, .426, .475, .127, .035, -.44):
-                color = (255, 244, 173, 255)
-
-            rows.extend(color)
-
-    header = struct.pack(">IIBBBBB", size, size, 8, 6, 0, 0, 0)
-    return (
-        b"\x89PNG\r\n\x1a\n"
-        + chunk(b"IHDR", header)
-        + chunk(b"IDAT", zlib.compress(bytes(rows), 9))
-        + chunk(b"IEND", b"")
-    )
+    return (ROOT / f"lemon/branding/icons/{size}.png").read_bytes()
 
 
 def main():
