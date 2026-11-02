@@ -1,9 +1,12 @@
 # Welcome to Lemon 🍋 
 
-Lemon is a free open source Element derived Matrix desktop client 
+Lemon is a free open-source Element derived Matrix chat client. Focused on privacy and open communication because everyone deserves a community without corporate oversight. 
+
+<img width="6226" height="3891" alt="lemonbckgrnd_fotoRC" src="https://github.com/user-attachments/assets/22ca5ce2-815f-4b25-92e5-2da0ed441be2" />
 
 ## Platforms Supported 
 
+- IOS: IOS 17.6 or later
 - macOS: x64 and ARM64
 - Windows: x64 and ARM64
 - Linux distros (AARCH64) that support glibc 2.35+ with plans for raspberry pi soon
